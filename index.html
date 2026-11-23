@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CBT - Computer Based Test</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ========== LOGIN ========== -->
+<section id="screen-login" class="login-wrap">
+  <div class="brand">
+    <h1>COMPUTER BASED TEST</h1>
+    <p>Sistem Ujian Berbasis Komputer</p>
+  </div>
+  <div class="card login-card">
+    <div id="resume-box" class="hidden">
+      <p class="notice">Anda memiliki ujian yang belum selesai:<br><b id="resume-info"></b></p>
+      <p class="muted small">Melanjutkan akan dihitung sebagai 1 pelanggaran (halaman dimuat ulang). Waktu tetap berjalan.</p>
+      <button id="btn-resume" class="btn btn-primary btn-block" type="button">Lanjutkan Ujian</button>
+    </div>
+
+    <form id="login-form" autocomplete="off">
+      <label for="in-nama">Nama Lengkap</label>
+      <input id="in-nama" type="text" required maxlength="100" placeholder="Nama sesuai absen">
+
+      <label for="in-nisn">NISN</label>
+      <input id="in-nisn" type="text" inputmode="numeric" required maxlength="20" placeholder="Nomor Induk Siswa Nasional">
+
+      <label for="in-mapel">Mata Pelajaran</label>
+      <select id="in-mapel" required><option value="">Memuat daftar mapel...</option></select>
+
+      <div class="rules">
+        <b>Tata Tertib:</b>
+        <ul>
+          <li>Ujian wajib dikerjakan dalam mode <b>layar penuh</b>.</li>
+          <li>Dilarang pindah tab, meminimalkan browser, atau membuka aplikasi lain.</li>
+          <li>Pelanggaran ke-<span id="max-viol">3</span> akan menghentikan ujian secara otomatis.</li>
+        </ul>
+      </div>
+
+      <p id="login-error" class="error hidden"></p>
+      <button id="btn-start" class="btn btn-primary btn-block" type="submit">Mulai Ujian</button>
+    </form>
+  </div>
+</section>
+
+<!-- ========== UJIAN ========== -->
+<section id="screen-exam" class="hidden">
+  <header class="topbar">
+    <div class="who">
+      <b id="hd-nama"></b>
+      <span id="hd-mapel"></span>
+    </div>
+    <div class="topbar-right">
+      <span class="viol">Pelanggaran: <b id="hd-viol">0</b>/<span id="hd-max">3</span></span>
+      <span id="timer" class="timer">00:00:00</span>
+    </div>
+  </header>
+
+  <div class="exam-body noselect">
+    <main class="card q-panel">
+      <div class="q-head">
+        <b id="q-no"></b>
+        <button id="btn-clear" type="button" class="link-btn">Hapus jawaban</button>
+      </div>
+      <div id="q-text" class="q-text"></div>
+      <div id="q-options" class="q-options"></div>
+      <div class="q-nav">
+        <button id="btn-prev" type="button" class="btn">« Sebelumnya</button>
+        <button id="btn-ragu" type="button" class="btn btn-ragu">Ragu-ragu</button>
+        <button id="btn-next" type="button" class="btn btn-primary">Selanjutnya »</button>
+      </div>
+    </main>
+
+    <aside class="card grid-panel">
+      <b>Daftar Soal</b>
+      <div id="grid" class="grid"></div>
+      <div class="legend">
+        <span><i class="lg lg-ans"></i>Dijawab</span>
+        <span><i class="lg lg-ragu"></i>Ragu</span>
+        <span><i class="lg lg-cur"></i>Aktif</span>
+        <span><i class="lg"></i>Kosong</span>
+      </div>
+      <button id="btn-finish" type="button" class="btn btn-danger btn-block">Selesai Ujian</button>
+    </aside>
+  </div>
+</section>
+
+<!-- ========== HASIL ========== -->
+<section id="screen-result" class="login-wrap hidden">
+  <div class="brand"><h1>UJIAN SELESAI</h1></div>
+  <div class="card login-card center">
+    <p><b id="res-nama"></b></p>
+    <p class="muted" id="res-mapel"></p>
+    <p id="res-status" class="notice"></p>
+    <div id="res-score" class="hidden">
+      <div class="score" id="res-nilai"></div>
+      <p class="muted" id="res-detail"></p>
+    </div>
+    <p id="res-msg" class="muted"></p>
+    <p class="muted small">Jawaban Anda telah tersimpan. Anda boleh menutup halaman ini.</p>
+  </div>
+</section>
+
+<!-- ========== OVERLAY PERINGATAN ========== -->
+<div id="overlay-warning" class="overlay hidden">
+  <div class="modal">
+    <h2>⚠ PELANGGARAN TERDETEKSI</h2>
+    <p id="warn-msg"></p>
+    <p>Pelanggaran: <b id="warn-count"></b> dari <span id="warn-max"></span>. Jika mencapai batas, ujian dihentikan otomatis.</p>
+    <p id="warn-err" class="error"></p>
+    <button id="btn-return" class="btn btn-primary" type="button">Kembali ke Ujian (Layar Penuh)</button>
+  </div>
+</div>
+
+<!-- ========== MODAL KONFIRMASI SELESAI ========== -->
+<div id="overlay-confirm" class="overlay hidden">
+  <div class="modal">
+    <h2>Selesaikan Ujian?</h2>
+    <p id="confirm-info"></p>
+    <div class="modal-actions">
+      <button id="btn-confirm-no" class="btn" type="button">Kembali</button>
+      <button id="btn-confirm-yes" class="btn btn-danger" type="button">Ya, Kirim Jawaban</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== OVERLAY PENGIRIMAN ========== -->
+<div id="overlay-submit" class="overlay hidden">
+  <div class="modal center">
+    <h2 id="sub-title">Mengirim jawaban...</h2>
+    <p id="sub-msg"></p>
+    <button id="btn-retry" class="btn btn-primary hidden" type="button">Kirim Ulang</button>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
