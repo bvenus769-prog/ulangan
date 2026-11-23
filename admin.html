@@ -2,86 +2,10 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex,nofollow">
-  <title>Admin CBT</title>
-  <link rel="stylesheet" href="style.css">
+  <meta http-equiv="refresh" content="0;url=index.html#guru">
+  <title>Mengalihkan...</title>
 </head>
 <body>
-
-<!-- LOGIN ADMIN -->
-<section id="admin-login" class="login-wrap">
-  <div class="brand"><h1>ADMIN / GURU</h1><p>Panel Pengelolaan CBT</p></div>
-  <div class="card login-card">
-    <form id="form-login">
-      <label for="ad-pass">Password Admin</label>
-      <input id="ad-pass" type="password" required autocomplete="current-password">
-      <p id="ad-login-err" class="error hidden"></p>
-      <button class="btn btn-primary btn-block" type="submit">Masuk</button>
-    </form>
-  </div>
-</section>
-
-<!-- DASHBOARD -->
-<div id="admin-main" class="admin-wrap hidden">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-    <h2 style="margin:0">Panel Admin CBT</h2>
-    <button id="btn-logout" class="btn" type="button">Keluar</button>
-  </div>
-
-  <!-- FITUR 1: UPLOAD SOAL -->
-  <div class="card">
-    <h2>1. Upload Bank Soal (CSV)</h2>
-    <div class="row">
-      <div>
-        <label for="up-mapel">Nama Mata Pelajaran</label>
-        <input id="up-mapel" type="text" maxlength="60" placeholder="contoh: Matematika">
-      </div>
-      <div>
-        <label for="up-durasi">Durasi (menit)</label>
-        <input id="up-durasi" type="number" min="1" max="600" value="60">
-      </div>
-      <div>
-        <label for="up-file">File CSV</label>
-        <input id="up-file" type="file" accept=".csv,text/csv">
-      </div>
-    </div>
-    <p class="muted small" style="margin-top:8px">
-      Format kolom: <code>pertanyaan, opsi_a, opsi_b, opsi_c, opsi_d, opsi_e, kunci</code>.
-      <a href="template_soal.csv" download>Unduh template CSV</a>.
-      Jika mapel sudah ada, bank soal lamanya akan <b>diganti</b> (hasil ujian tidak dihapus).
-    </p>
-    <p id="up-preview" class="muted" style="margin-top:8px"></p>
-    <p id="up-msg" class="hidden"></p>
-    <button id="btn-upload" class="btn btn-primary btn-inline" type="button" disabled>Upload Soal</button>
-  </div>
-
-  <!-- FITUR 2: REKAP NILAI -->
-  <div class="card">
-    <h2>2. Rekap Nilai Siswa</h2>
-    <div class="row">
-      <div>
-        <label for="rk-mapel">Mata Pelajaran</label>
-        <select id="rk-mapel"></select>
-      </div>
-    </div>
-    <button id="btn-load" class="btn btn-primary btn-inline" type="button">Tampilkan Nilai</button>
-    <button id="btn-export" class="btn btn-inline" type="button" disabled>Unduh CSV</button>
-    <button id="btn-refresh" class="btn btn-inline" type="button">Muat Ulang Daftar Mapel</button>
-    <p id="rk-msg" class="hidden"></p>
-    <div id="rk-stats" class="stats"></div>
-    <div class="table-wrap">
-      <table id="rk-table" class="hidden">
-        <thead>
-          <tr><th>No</th><th>Waktu</th><th>Nama</th><th>NISN</th><th>Benar</th><th>Salah</th><th>Kosong</th><th>Nilai</th><th>Pelanggaran</th><th>Status</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<script src="config.js"></script>
-<script src="admin.js"></script>
+  <p>Mengalihkan ke <a href="index.html#guru">halaman login guru</a>...</p>
 </body>
 </html>

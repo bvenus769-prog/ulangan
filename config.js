@@ -1,6 +1,6 @@
 // ====== KONFIGURASI BERSAMA (dipakai index.html & admin.html) ======
 const CONFIG = {
-  API_URL: "https://script.google.com/macros/s/AKfycbxEluHdji_iGzb-Q9Zw-_RG_H1gOzsEHEuczR-wnganama5fQfqpIp4zlX17yck3ayH/exec", // contoh: https://script.google.com/macros/s/AKfycb.../exec
+  API_URL: "PASTE_URL_WEB_APP_GAS_DISINI", // contoh: https://script.google.com/macros/s/AKfycb.../exec
   MAX_VIOLATIONS: 3,                        // batas pelanggaran sebelum ujian dihentikan paksa
   SHOW_SCORE: true                          // tampilkan nilai ke siswa setelah selesai?
 };

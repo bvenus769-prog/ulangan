@@ -28,6 +28,9 @@
       <label for="in-nisn">NISN</label>
       <input id="in-nisn" type="text" inputmode="numeric" required maxlength="20" placeholder="Nomor Induk Siswa Nasional">
 
+      <label for="in-kelas">Kelas</label>
+      <input id="in-kelas" type="text" required maxlength="30" placeholder="contoh: XII IPA 1">
+
       <label for="in-mapel">Mata Pelajaran</label>
       <select id="in-mapel" required><option value="">Memuat daftar mapel...</option></select>
 
@@ -43,6 +46,8 @@
       <p id="login-error" class="error hidden"></p>
       <button id="btn-start" class="btn btn-primary btn-block" type="submit">Mulai Ujian</button>
     </form>
+    <hr style="border:none;border-top:1px solid var(--line);margin:18px 0 4px">
+    <button id="btn-to-admin" class="btn btn-block" type="button">🔐 Login Guru / Admin</button>
   </div>
 </section>
 
@@ -136,7 +141,83 @@
   </div>
 </div>
 
+<!-- ========== LOGIN GURU / ADMIN ========== -->
+<section id="admin-login" class="login-wrap hidden">
+  <div class="brand"><h1>LOGIN GURU / ADMIN</h1><p>Panel Pengelolaan CBT</p></div>
+  <div class="card login-card">
+    <form id="form-login">
+      <label for="ad-pass">Password Guru / Admin</label>
+      <input id="ad-pass" type="password" required autocomplete="current-password">
+      <p id="ad-login-err" class="error hidden"></p>
+      <button class="btn btn-primary btn-block" type="submit">Masuk</button>
+    </form>
+    <button id="btn-back-siswa" class="btn btn-block" type="button">← Kembali ke Login Siswa</button>
+  </div>
+</section>
+
+<!-- ========== PANEL ADMIN ========== -->
+<div id="admin-main" class="admin-wrap hidden">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <h2 style="margin:0">Panel Guru / Admin</h2>
+    <button id="btn-logout" class="btn" type="button">Keluar</button>
+  </div>
+
+  <div class="card">
+    <h2>1. Upload Bank Soal (CSV)</h2>
+    <div class="row">
+      <div>
+        <label for="up-mapel">Nama Mata Pelajaran</label>
+        <input id="up-mapel" type="text" maxlength="60" placeholder="contoh: Matematika">
+      </div>
+      <div>
+        <label for="up-durasi">Durasi (menit)</label>
+        <input id="up-durasi" type="number" min="1" max="600" value="60">
+      </div>
+      <div>
+        <label for="up-file">File CSV</label>
+        <input id="up-file" type="file" accept=".csv,text/csv">
+      </div>
+    </div>
+    <p class="muted small" style="margin-top:8px">
+      Format kolom: <code>pertanyaan, opsi_a, opsi_b, opsi_c, opsi_d, opsi_e, kunci</code>.
+      <a href="template_soal.csv" download>Unduh template CSV</a>.
+      Jika mapel sudah ada, bank soal lamanya akan <b>diganti</b> (hasil ujian tidak dihapus).
+    </p>
+    <p id="up-preview" class="muted" style="margin-top:8px"></p>
+    <p id="up-msg" class="hidden"></p>
+    <button id="btn-upload" class="btn btn-primary btn-inline" type="button" disabled>Upload Soal</button>
+  </div>
+
+  <div class="card">
+    <h2>2. Rekap Nilai Siswa</h2>
+    <div class="row">
+      <div>
+        <label for="rk-mapel">Mata Pelajaran</label>
+        <select id="rk-mapel"></select>
+      </div>
+      <div>
+        <label for="rk-kelas">Filter Kelas</label>
+        <select id="rk-kelas"><option value="">Semua Kelas</option></select>
+      </div>
+    </div>
+    <button id="btn-load" class="btn btn-primary btn-inline" type="button">Tampilkan Nilai</button>
+    <button id="btn-export" class="btn btn-inline" type="button" disabled>Unduh CSV</button>
+    <button id="btn-refresh" class="btn btn-inline" type="button">Muat Ulang Daftar Mapel</button>
+    <p id="rk-msg" class="hidden"></p>
+    <div id="rk-stats" class="stats"></div>
+    <div class="table-wrap">
+      <table id="rk-table" class="hidden">
+        <thead>
+          <tr><th>No</th><th>Waktu</th><th>Nama</th><th>NISN</th><th>Kelas</th><th>Benar</th><th>Salah</th><th>Kosong</th><th>Nilai</th><th>Pelanggaran</th><th>Status</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <script src="config.js"></script>
 <script src="app.js"></script>
+<script src="admin.js"></script>
 </body>
 </html>

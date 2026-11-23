@@ -10,6 +10,7 @@
   let adminKey = '';
   let parsedSoal = [];
   let lastData = [];
+  let viewData = [];
   let lastMapel = '';
 
   function setMsg(id, text, ok) {
@@ -28,6 +29,7 @@
     adminKey = pw;
     try { sessionStorage.setItem(SS_KEY, pw); } catch (e) { /* abaikan */ }
     $('admin-login').classList.add('hidden');
+    $('screen-login').classList.add('hidden');
     $('admin-main').classList.remove('hidden');
     loadMapel();
   }
@@ -172,7 +174,15 @@
       if (!r.ok) throw new Error(r.error);
       lastData = r.data;
       lastMapel = r.mapel;
-      renderTable(r.data);
+      const kelasList = Array.from(new Set(r.data.map((x) => x.kelas).filter(Boolean))).sort();
+      const ks = $('rk-kelas');
+      ks.innerHTML = '<option value="">Semua Kelas</option>';
+      kelasList.forEach((k) => {
+        const o = document.createElement('option');
+        o.value = k; o.textContent = k;
+        ks.appendChild(o);
+      });
+      applyFilter();
       setMsg('rk-msg', r.data.length ? '' : 'Belum ada siswa yang mengerjakan mapel ini.', true);
     } catch (e) {
       setMsg('rk-msg', e.message, false);
@@ -180,6 +190,13 @@
       btn.disabled = false;
     }
   });
+
+  function applyFilter() {
+    const k = $('rk-kelas').value;
+    viewData = k ? lastData.filter((r) => r.kelas === k) : lastData;
+    renderTable(viewData);
+  }
+  $('rk-kelas').addEventListener('change', applyFilter);
 
   function cell(tr, text) {
     const td = document.createElement('td');
@@ -192,7 +209,7 @@
     tbody.innerHTML = '';
     data.forEach((r, i) => {
       const tr = document.createElement('tr');
-      [i + 1, r.waktu, r.nama, r.nisn, r.benar, r.salah, r.kosong, r.nilai, r.pelanggaran, r.status].forEach((v) => cell(tr, v));
+      [i + 1, r.waktu, r.nama, r.nisn, r.kelas, r.benar, r.salah, r.kosong, r.nilai, r.pelanggaran, r.status].forEach((v) => cell(tr, v));
       tbody.appendChild(tr);
     });
     $('rk-table').classList.toggle('hidden', !data.length);
@@ -220,9 +237,9 @@
       if (/^[=+\-@]/.test(s)) s = "'" + s;   // cegah formula injection di Excel
       return '"' + s.replace(/"/g, '""') + '"';
     };
-    const head = ['No', 'Waktu', 'Nama', 'NISN', 'Benar', 'Salah', 'Kosong', 'Nilai', 'Pelanggaran', 'Status'];
+    const head = ['No', 'Waktu', 'Nama', 'NISN', 'Kelas', 'Benar', 'Salah', 'Kosong', 'Nilai', 'Pelanggaran', 'Status'];
     const lines = [head.map(esc).join(',')];
-    lastData.forEach((r, i) => lines.push([i + 1, r.waktu, r.nama, r.nisn, r.benar, r.salah, r.kosong, r.nilai, r.pelanggaran, r.status].map(esc).join(',')));
+    viewData.forEach((r, i) => lines.push([i + 1, r.waktu, r.nama, r.nisn, r.kelas, r.benar, r.salah, r.kosong, r.nilai, r.pelanggaran, r.status].map(esc).join(',')));
     const blob = new Blob(['\uFEFF' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);

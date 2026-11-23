@@ -106,8 +106,9 @@
     loginError('');
     const nama = $('in-nama').value.trim();
     const nisn = $('in-nisn').value.trim();
+    const kelas = $('in-kelas').value.trim();
     const mapel = $('in-mapel').value;
-    if (!nama || !nisn || !mapel) return loginError('Lengkapi nama, NISN, dan mata pelajaran.');
+    if (!nama || !nisn || !kelas || !mapel) return loginError('Lengkapi nama, NISN, kelas, dan mata pelajaran.');
     if (!/^\d{5,20}$/.test(nisn)) return loginError('NISN harus berupa angka (minimal 5 digit).');
 
     const btn = $('btn-start');
@@ -124,7 +125,7 @@
       if (!r.soal.length) throw new Error('Soal belum tersedia.');
 
       S = {
-        nama: nama, nisn: nisn, mapel: r.mapel, durasi: r.durasi,
+        nama: nama, nisn: nisn, kelas: kelas, mapel: r.mapel, durasi: r.durasi,
         soal: r.soal,
         order: shuffle(r.soal.map((q) => q.id)),   // soal diacak di frontend
         answers: {}, ragu: {}, idx: 0,
@@ -159,7 +160,7 @@
   function startExam() {
     soalMap = {};
     S.soal.forEach((q) => { soalMap[q.id] = q; });
-    $('hd-nama').textContent = S.nama + ' (' + S.nisn + ')';
+    $('hd-nama').textContent = S.nama + ' (' + S.nisn + ')' + (S.kelas ? ' - ' + S.kelas : '');
     $('hd-mapel').textContent = S.mapel;
     showScreen('screen-exam');
     $('overlay-warning').classList.add('hidden');
@@ -336,7 +337,7 @@
     showSubmit('Mengirim jawaban...', 'Mohon tunggu, jangan menutup halaman ini.', false);
 
     const payload = {
-      action: 'submit', nama: S.nama, nisn: S.nisn, mapel: S.mapel,
+      action: 'submit', nama: S.nama, nisn: S.nisn, kelas: S.kelas || '', mapel: S.mapel,
       jawaban: S.answers, pelanggaran: S.violations, status: status, clientId: S.clientId
     };
     try {
@@ -370,5 +371,18 @@
     showScreen('screen-result');
   }
 
+  // ---------- Pindah ke login guru (satu halaman, satu link) ----------
+  function openAdminLogin() {
+    if (examActive) return;
+    ['screen-login', 'screen-exam', 'screen-result'].forEach((s) => $(s).classList.add('hidden'));
+    $('admin-login').classList.remove('hidden');
+  }
+  $('btn-to-admin').addEventListener('click', openAdminLogin);
+  $('btn-back-siswa').addEventListener('click', () => {
+    $('admin-login').classList.add('hidden');
+    showScreen('screen-login');
+  });
+
   init();
+  if (location.hash === '#guru') openAdminLogin();
 })();
